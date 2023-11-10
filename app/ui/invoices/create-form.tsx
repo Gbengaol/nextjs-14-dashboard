@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { CustomerField } from "@/app/lib/definitions";
 import Link from "next/link";
 import {
@@ -15,6 +15,8 @@ import { createInvoice } from "@/app/lib/actions";
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createInvoice, initialState);
+  const { pending } = useFormStatus();
+
   return (
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -148,7 +150,9 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create Invoice</Button>
+        <Button type="submit" aria-disabled={pending}>
+          Create Invoice
+        </Button>
       </div>
     </form>
   );
